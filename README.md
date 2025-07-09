@@ -1,6 +1,6 @@
 # DataPackPlus
 
-This is a Fabric Minecraft mod which adds a few features which are useful to Minecraft Datapack developers.
+This is a Fabric Minecraft mod which adds a few features which are useful to Minecraft data pack developers.
 
 ```
 /data math <operation> storage <identifier>
