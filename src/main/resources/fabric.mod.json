@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "datapackplus",
+  "version": "${version}",
+  "name": "DataPackPlus",
+  "description": "Adds commands useful for datapack developers, like math commands!",
+  "authors": ["JZalaOz"],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/datapackplus/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.jzalaoz.datapackplus.DataPackPlusMain"
+    ]
+  },
+  "mixins": [
+    "datapackplus.mixins.json"
+  ],
+  "depends": {
+    "minecraft": ">=${minecraft_version}",
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*"
+  }
+}
