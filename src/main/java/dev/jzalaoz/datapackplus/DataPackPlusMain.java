@@ -1,9 +1,9 @@
 package dev.jzalaoz.datapackplus;
 
-import dev.jzalaoz.datapackplus.math.MathOperationArgumentType;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.ArgumentTypeRegistry;
-import net.minecraft.command.argument.serialize.ConstantArgumentSerializer;
+import net.minecraft.command.CommandSource;
+import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,14 +11,12 @@ import org.slf4j.LoggerFactory;
 public class DataPackPlusMain implements ModInitializer {
 
     public static Logger LOGGER = LoggerFactory.getLogger("DataPackPlus");
+    public static final SuggestionProvider<ServerCommandSource> STORAGE_SUGGESTION_PROVIDER = (context, builder) ->
+            CommandSource.suggestIdentifiers(context.getSource().getServer().getDataCommandStorage().getIds(), builder);
 
     @Override
     public void onInitialize() {
-        ArgumentTypeRegistry.registerArgumentType(
-                DataPackPlusMain.getIdentifier("math_operation"),
-                MathOperationArgumentType.class,
-                ConstantArgumentSerializer.of(MathOperationArgumentType::new)
-        );
+
     }
 
     public static Identifier getIdentifier(String path) {

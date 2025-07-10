@@ -1,38 +1,39 @@
-package dev.jzalaoz.datapackplus.math;
+package dev.jzalaoz.datapackplus.variable;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import dev.jzalaoz.datapackplus.math.MathOperationException;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.command.ServerCommandSource;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class MathOperationHandler {
+public abstract class VariableHandler {
 
-    protected MathOperation operation;
+    protected VariableType type;
 
-    public void setOperation(MathOperation operation) {
-        assert this.operation == null;
-        this.operation = operation;
+    public void setType(VariableType type) {
+        assert this.type == null;
+        this.type = type;
     }
 
-    public MathOperation getOperation() {
-        return this.operation;
+    public VariableType getType() {
+        return this.type;
     }
 
-    public abstract void evaluate(NbtList input, NbtList output, ServerCommandSource source) throws CommandSyntaxException;
+    public abstract void evaluate(NbtList input, NbtList output, ServerCommandSource source, VariableTypeModifier modifier) throws CommandSyntaxException;
 
     public void throwIfNotSize(NbtList input, int size, String message) {
         if (input.size() != size) {
-            throw new MathOperationException(message);
+            throw new VariableException(message);
         }
     }
 
     public NbtList getList(NbtList input, int index, @Nullable String variableName) {
         return input.getList(index).orElseThrow(() -> {
             if (variableName == null) {
-                return new MathOperationException("Cannot find input variable TAG_LIST at index " + index);
+                return new VariableException("Cannot find input variable TAG_LIST at index " + index);
             } else {
-                return new MathOperationException("Cannot find input variable TAG_LIST named '" + variableName + "' at index" + index);
+                return new VariableException("Cannot find input variable TAG_LIST named '" + variableName + "' at index" + index);
             }
         });
     }
@@ -43,9 +44,9 @@ public abstract class MathOperationHandler {
             return parseNumber(element, variableName);
         } catch (IndexOutOfBoundsException exception) {
             if (variableName == null) {
-                throw new MathOperationException("Cannot find input variable at index " + index);
+                throw new VariableException("Cannot find input variable at index " + index);
             } else {
-                throw new MathOperationException("Cannot find input variable named '" + variableName + "' at index" + index);
+                throw new VariableException("Cannot find input variable named '" + variableName + "' at index" + index);
             }
         }
     }
@@ -64,7 +65,7 @@ public abstract class MathOperationHandler {
         } else if (element.getType() == NbtElement.DOUBLE_TYPE) {
             num = element.asDouble().orElseThrow();
         } else {
-            throw new MathOperationException("Cannot parse " + element.getNbtType().getCommandFeedbackName());
+            throw new VariableException("Cannot parse " + element.getNbtType().getCommandFeedbackName());
         }
 
         return num;

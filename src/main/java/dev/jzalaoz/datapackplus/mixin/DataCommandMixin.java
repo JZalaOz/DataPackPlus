@@ -4,6 +4,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import dev.jzalaoz.datapackplus.math.MathCommand;
+import dev.jzalaoz.datapackplus.variable.VariableCommand;
 import net.minecraft.server.command.DataCommand;
 import net.minecraft.server.command.ServerCommandSource;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +23,7 @@ public abstract class DataCommandMixin {
     )
     private static void registerSubCommands(CommandDispatcher<ServerCommandSource> dispatcher, CallbackInfo ci, @Local LiteralArgumentBuilder<ServerCommandSource> literalArgumentBuilder) {
         MathCommand.register(literalArgumentBuilder);
+        VariableCommand.register(literalArgumentBuilder);
     }
 
 }

@@ -1,12 +1,13 @@
 package dev.jzalaoz.datapackplus.math;
 
+import com.mojang.brigadier.Message;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import dev.jzalaoz.datapackplus.DataPackPlusMain;
-import net.minecraft.command.CommandSource;
 import net.minecraft.command.argument.IdentifierArgumentType;
 import net.minecraft.command.argument.NbtCompoundArgumentType;
 import net.minecraft.command.argument.NbtPathArgumentType;
@@ -19,24 +20,38 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Colors;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public class MathCommand {
 
-    public static final SuggestionProvider<ServerCommandSource> STORAGE_SUGGESTION_PROVIDER = (context, builder) ->
-            CommandSource.suggestIdentifiers(context.getSource().getServer().getDataCommandStorage().getIds(), builder);
+    public static final Collection<Pair<String, Message>> OPERATION_SUGGESTIONS = MathOperation.getSuggestions();
+    public static final SuggestionProvider<ServerCommandSource> OPERATION_SUGGESTION_PROVIDER = (context, builder) -> {
+        String input = builder.getRemaining().toLowerCase(Locale.ROOT);
+
+        for (Pair<String, Message> suggestion : OPERATION_SUGGESTIONS) {
+            if (suggestion.getLeft().toLowerCase().startsWith(input)) {
+                builder.suggest(suggestion.getLeft(), suggestion.getRight());
+            }
+        }
+
+        return builder.buildFuture();
+    };
 
     public static void register(LiteralArgumentBuilder<ServerCommandSource> literalArgumentBuilder) {
         literalArgumentBuilder.then(CommandManager.literal("math")
-                .then(CommandManager.argument("operation", new MathOperationArgumentType())
+                .then(CommandManager.argument("operation", StringArgumentType.word())
+                        .suggests(OPERATION_SUGGESTION_PROVIDER)
                         .then(CommandManager.literal("storage")
                                 .then(CommandManager.argument("identifier", IdentifierArgumentType.identifier())
-                                        .suggests(STORAGE_SUGGESTION_PROVIDER)
+                                        .suggests(DataPackPlusMain.STORAGE_SUGGESTION_PROVIDER)
                                         .executes(context ->
                                                 executeStorage(context,
-                                                        context.getArgument("operation", MathOperation.class),
+                                                        MathOperation.getFromKey(StringArgumentType.getString(context, "operation")),
                                                         IdentifierArgumentType.getIdentifier(context, "identifier"),
                                                         null
                                                 )
@@ -44,7 +59,7 @@ public class MathCommand {
                                         .then(CommandManager.argument("path", NbtPathArgumentType.nbtPath())
                                                 .executes(context ->
                                                         executeStorage(context,
-                                                                context.getArgument("operation", MathOperation.class),
+                                                                MathOperation.getFromKey(StringArgumentType.getString(context, "operation")),
                                                                 IdentifierArgumentType.getIdentifier(context, "identifier"),
                                                                 NbtPathArgumentType.getNbtPath(context, "path")
                                                         )
@@ -56,7 +71,7 @@ public class MathCommand {
                                 .then(CommandManager.argument("nbt", NbtCompoundArgumentType.nbtCompound())
                                         .executes(context ->
                                                 executeWith(context,
-                                                        context.getArgument("operation", MathOperation.class),
+                                                        MathOperation.getFromKey(StringArgumentType.getString(context, "operation")),
                                                         NbtCompoundArgumentType.getNbtCompound(context, "nbt")
                                                 )
                                         )
@@ -120,7 +135,7 @@ public class MathCommand {
     }
 
     private static NbtList processOperation(CommandContext<ServerCommandSource> context, MathOperation operation, NbtCompound nbt) throws CommandSyntaxException {
-        NbtList input = nbt.getList("in").orElseThrow(() -> new MathOperationException("Cannot find 'in' TAG_LIST"));
+        NbtList input = nbt.getListOrEmpty("in");
         NbtList output = new NbtList();
         operation.handler.evaluate(input, output, context.getSource());
         return output;

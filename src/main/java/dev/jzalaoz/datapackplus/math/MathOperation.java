@@ -3,7 +3,7 @@ package dev.jzalaoz.datapackplus.math;
 import com.mojang.brigadier.Message;
 import dev.jzalaoz.datapackplus.math.operations.*;
 import net.minecraft.text.Text;
-import oshi.util.tuples.Pair;
+import net.minecraft.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
