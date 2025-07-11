@@ -27,7 +27,6 @@ public class AngleVariable extends VariableHandler {
             pitch = entity.getPitch() + pitch;
         }
 
-        entity.setYaw((float) yaw);
-        entity.setPitch((float) pitch);
+        entity.rotate((float) yaw, (float) pitch);
     }
 }
