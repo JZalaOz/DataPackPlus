@@ -58,18 +58,8 @@ Example of using /data math (the NBT schema is the same for variable)
 
 ## Math operations
 
-#### Arithmetic Operations
-
 For all arithmetic operations, the input is an array of numbers of any size. If the size is more than 2, it will treat it as chaining the operations, for example, if it's an add operation with 4 inputs, it will sum it all up.
 
-* add
-* subtract
-* multiply
-* divide
-
-<br><hr>
-
-### Math Operations
 If you want to know what these operations are, just search for them.
 
 | Operation Name         | Input Size | Notes                     |
