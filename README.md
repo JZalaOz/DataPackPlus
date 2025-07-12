@@ -6,7 +6,7 @@
     </a>
     <h3 align="center">DataPackPlus (DP+)</h3>
     <p align="center">
-        A helpful Minecraft Fabric mod to improve the lifes of data pack developers!
+        A helpful Minecraft Fabric mod to improve the lives of data pack developers!
     </p>
 </div>
 
