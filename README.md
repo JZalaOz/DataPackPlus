@@ -12,7 +12,7 @@
 
 ## About the project
 
-My friend nedraw is a datapack developer, and we are working together modding + datapack. To help him out i make a api for him, so he can make datapacks easier and with better performance.
+My friend nedraw is a datapack developer, and we are working together modding + datapack. To help him out i made a api for him, so he can make datapacks easier and with better performance.
 
 I decided to open source and publish this so i can help other people out.
 
@@ -44,7 +44,13 @@ Here are some examples on how to use the command:<br>
 
 * `Ridable players`<br>
 
-You can have entities mount and dismount onto players, the player being ridden cannot dismount the entity without commands.
+You can have entities mount and dismount onto players, the player being ridden cannot force the entity to dismount.
+
+Example of using /data math (the nbt schema is the same for variable)
+```
+/data modify storage minecraft:test in set value [43,35] (Storage nbt: {in:[43,35]} )
+/data math add storage minecraft:test (Storage nbt: {in:[43,35],out:[78.0d]})
+```
 
 ## Math operations
 
