@@ -16,9 +16,9 @@
 
 ## About the project
 
-My friend nedraw is a datapack developer, and we are working together modding + datapack. To help him out i made a api for him, so he can make datapacks easier and with better performance.
+My friend Nedraw is a datapack developer, and we're working together on modding and datapack development. To help him out, I made an api for him, so he can make datapacks easier and with better performance.
 
-I decided to open source and publish this so i can help other people out.
+I decided to open-source and publish this so I can help other people out.
 
 <hr>
 
@@ -48,9 +48,9 @@ Here are some examples on how to use the command:<br>
 
 * `Ridable players`<br>
 
-You can have entities mount and dismount onto players, the player being ridden cannot force the entity to dismount.
+You can have entities mount and dismount onto players; the player being ridden cannot force the entity to dismount.
 
-Example of using /data math (the nbt schema is the same for variable)
+Example of using /data math (the NBT schema is the same for variable)
 ```
 /data modify storage minecraft:test in set value [43,35] (Storage nbt: {in:[43,35]} )
 /data math add storage minecraft:test (Storage nbt: {in:[43,35],out:[78.0d]})
@@ -60,7 +60,7 @@ Example of using /data math (the nbt schema is the same for variable)
 
 #### Arithmetic Operations
 
-For all arithmetic operations, the input is a array of numbers any size. if the size is more than 2 it will treat it as chaining the operations, for example if its add operation with 4 inputs it will sum it all up.
+For all arithmetic operations, the input is an array of numbers of any size. If the size is more than 2, it will treat it as chaining the operations, for example, if it's an add operation with 4 inputs, it will sum it all up.
 
 * add
 * subtract
@@ -70,7 +70,7 @@ For all arithmetic operations, the input is a array of numbers any size. if the 
 <br><hr>
 
 ### Math Operations
-If you want to know what these operations are, just search them.
+If you want to know what these operations are, just search for them.
 
 | Operation Name         | Input Size | Notes                     |
 |------------------------|:----------:|:-------------------------:|
