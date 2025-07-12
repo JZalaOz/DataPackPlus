@@ -1,4 +1,3 @@
-
 <br>
 <div align="center">
     <a href="https://github.com/JZalaOz/DataPackPlus">
@@ -7,6 +6,11 @@
     <h3 align="center">DataPackPlus (DP+)</h3>
     <p align="center">
         A helpful Minecraft Fabric mod to improve the lives of data pack developers!
+        <br />
+        <br />
+        <a href="https://github.com/JZalaOz/DataPackPlus/issues/new?template=bug-report--.md">Report Bug</a>
+        &middot;
+        <a href="https://github.com/JZalaOz/DataPackPlus/issues/new?template=feature-request--.md">Request Feature</a>
     </p>
 </div>
 
