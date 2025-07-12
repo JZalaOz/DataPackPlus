@@ -3,7 +3,7 @@ package dev.jzalaoz.datapackplus.variable;
 import com.mojang.brigadier.Message;
 import dev.jzalaoz.datapackplus.variable.types.*;
 import net.minecraft.text.Text;
-import net.minecraft.util.Pair;
+import oshi.util.tuples.Triplet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,13 +41,13 @@ public enum VariableType {
         this(key, handler, true, true);
     }
 
-    public static Collection<Pair<String, Message>> getSuggestions() {
-        Collection<Pair<String, Message>> list = new ArrayList<>();
+    public static Collection<Triplet<String, Message, VariableType>> getSuggestions() {
+        Collection<Triplet<String, Message, VariableType>> list = new ArrayList<>();
 
         for (VariableType value : values()) {
             String title = value.name().replace('_', ' ');
             title = title.substring(0, 1).toUpperCase() + title.substring(1).toLowerCase();
-            list.add(new Pair<>(value.key, Text.literal(title)));
+            list.add(new Triplet<>(value.key, Text.literal(title), value));
         }
 
         return list;

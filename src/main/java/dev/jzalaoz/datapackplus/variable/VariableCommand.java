@@ -22,6 +22,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 import org.jetbrains.annotations.Nullable;
+import oshi.util.tuples.Triplet;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,18 +31,7 @@ import java.util.function.Consumer;
 
 public class VariableCommand {
 
-    public static final Collection<Pair<String, Message>> VARIABLE_SUGGESTIONS = VariableType.getSuggestions();
-    public static final SuggestionProvider<ServerCommandSource> VARIABLE_SUGGESTION_PROVIDER = (context, builder) -> {
-        String input = builder.getRemaining().toLowerCase(Locale.ROOT);
-
-        for (Pair<String, Message> suggestion : VARIABLE_SUGGESTIONS) {
-            if (suggestion.getLeft().toLowerCase().startsWith(input)) {
-                builder.suggest(suggestion.getLeft(), suggestion.getRight());
-            }
-        }
-
-        return builder.buildFuture();
-    };
+    public static final Collection<Triplet<String, Message, VariableType>> VARIABLE_SUGGESTIONS = VariableType.getSuggestions();
 
     public static void register(LiteralArgumentBuilder<ServerCommandSource> literalArgumentBuilder) {
         // Ik this is very messy, but I am lazy, if someone else wants to fix go ahead
@@ -71,7 +61,7 @@ public class VariableCommand {
         // Get
         {
             var variableArgument = CommandManager.argument("variable", StringArgumentType.word())
-                    .suggests(VARIABLE_SUGGESTION_PROVIDER)
+                    .suggests(VARIABLE_SUGGESTION_PROVIDER_BUILDER(VariableTypeModifier.GET))
                     .executes(context -> executeGet(
                             context,
                             VariableType.getFromKey(StringArgumentType.getString(context, "variable"))
@@ -87,7 +77,7 @@ public class VariableCommand {
         // Set
         {
             var variableArgument = CommandManager.argument("variable", StringArgumentType.word())
-                    .suggests(VARIABLE_SUGGESTION_PROVIDER)
+                    .suggests(VARIABLE_SUGGESTION_PROVIDER_BUILDER(VariableTypeModifier.SET))
                     .executes(context -> executeGet(
                             context,
                             VariableType.getFromKey(StringArgumentType.getString(context, "variable"))
@@ -103,7 +93,7 @@ public class VariableCommand {
         // Add
         {
             var variableArgument = CommandManager.argument("variable", StringArgumentType.word())
-                    .suggests(VARIABLE_SUGGESTION_PROVIDER)
+                    .suggests(VARIABLE_SUGGESTION_PROVIDER_BUILDER(VariableTypeModifier.ADD))
                     .executes(context -> executeGet(
                             context,
                             VariableType.getFromKey(StringArgumentType.getString(context, "variable"))
@@ -127,7 +117,7 @@ public class VariableCommand {
         try {
             Pair<Identifier, NbtPathArgumentType.@Nullable NbtPath> storageData = getStorageNbtArgument(context);
             NbtCompound root = null;
-            NbtCompound nbt = null;
+            NbtCompound nbt;
 
             if (storageData == null) {
                 nbt = NbtCompoundArgumentType.getNbtCompound(context, "nbt");
@@ -221,6 +211,20 @@ public class VariableCommand {
         }
 
         return new Pair<>(root, nbt);
+    }
+
+    public static SuggestionProvider<ServerCommandSource> VARIABLE_SUGGESTION_PROVIDER_BUILDER(VariableTypeModifier modifier) {
+        return (context, builder) -> {
+            String input = builder.getRemaining().toLowerCase(Locale.ROOT);
+
+            for (Triplet<String, Message, VariableType> suggestion : VARIABLE_SUGGESTIONS) {
+                if (suggestion.getA().toLowerCase().startsWith(input) && suggestion.getC().modifiers.contains(modifier)) {
+                    builder.suggest(suggestion.getA(), suggestion.getB());
+                }
+            }
+
+            return builder.buildFuture();
+        };
     }
 
 }
