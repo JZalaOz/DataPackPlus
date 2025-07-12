@@ -1,7 +1,7 @@
 <br>
 <div align="center">
     <a href="https://github.com/JZalaOz/DataPackPlus">
-        <img src="src/main/resources/assets/datapackplus/icon.png" alt="Logo" width=80 height=80>
+        <img src="https://github.com/JZalaOz/DataPackPlus/blob/main/src/main/resources/assets/datapackplus/icon.png?raw=true" alt="Logo" width=80 height=80>
     </a>
     <h3 align="center">DataPackPlus (DP+)</h3>
     <p align="center">
